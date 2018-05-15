@@ -21,11 +21,19 @@ public class Profile {
     @SerializedName("user_id")
     private int userId;
 
-    public Profile(int id, String fullName, String birthdate, int userId) {
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
+
+    public Profile(int id, String fullName, String birthdate, int userId, String createdAt, String updatedAt) {
         this.id = id;
         this.fullName = fullName;
         this.birthdate = birthdate;
         this.userId = userId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -58,5 +66,21 @@ public class Profile {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

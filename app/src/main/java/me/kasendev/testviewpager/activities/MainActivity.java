@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
@@ -30,12 +32,24 @@ import com.ToxicBakery.viewpager.transforms.StackTransformer;
 import com.ToxicBakery.viewpager.transforms.TabletTransformer;
 import com.ToxicBakery.viewpager.transforms.ZoomInTransformer;
 
+import java.util.List;
+
 import me.kasendev.testviewpager.R;
 import me.kasendev.testviewpager.fragments.TabOneFragment;
 import me.kasendev.testviewpager.fragments.TabThreeFragment;
 import me.kasendev.testviewpager.fragments.MapFragment;
+import me.kasendev.testviewpager.model.Register;
+import me.kasendev.testviewpager.model.ResponseBody;
+import me.kasendev.testviewpager.model.User;
+import me.kasendev.testviewpager.network.UserClient;
+import me.kasendev.testviewpager.utils.Constants;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Constants {
 
     private int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -79,6 +93,36 @@ public class MainActivity extends AppCompatActivity {
 
         setSoftKeysOff();
 
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(BASE_URL+BASE_PREFIX+BASE_VERSION)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+
+        Register newUser = new Register("thanos3",
+                "thanosasdasd4@thanos.com",
+                "qwerty12aasdasd3",
+                "qwerty123",
+                "I AM GROOT",
+                "2018/08/08");
+
+        UserClient client = retrofit.create(UserClient.class);
+        Call<ResponseBody> call = client.register(newUser);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d("SHIT", "shit success");
+                Log.d("SHIT", ""+response.body()+" "+response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("SHIT", "shit error");
+                Log.d("SHIT", ""+t.getMessage());
+            }
+
+        });
     }
 
     private void setSoftKeysOff() {
